@@ -1,9 +1,6 @@
-import type { TodoItem, TodosActions, TodoState } from '../types';
+import type { TodosActions, TodoState } from '../types';
 
-export const todoReducer = (
-  state: TodoState,
-  action: TodosActions<TodoItem>,
-) => {
+export const todoReducer = (state: TodoState, action: TodosActions) => {
   switch (action.type) {
     case 'add': {
       const newTodo = action.payload;
@@ -11,17 +8,12 @@ export const todoReducer = (
     }
     case 'remove':
       return state.filter((todo) => todo.id !== action.payload.id);
-
     case 'toggle':
-      return state.map((todo) => {
-        if (todo.id === action.payload.id) {
-          return {
-            ...todo,
-            isDone: !todo.isDone,
-          };
-        }
-        return todo;
-      });
+      return state.map((todo) =>
+        todo.id === action.payload.id
+          ? { ...todo, isDone: action.payload.isDone }
+          : todo,
+      );
 
     default:
       return state;

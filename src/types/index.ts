@@ -1,13 +1,23 @@
 export type TodoItem = {
-  id: string | number;
+  id: number;
   title: string;
   isDone: boolean;
-  children?: React.ReactNode;
 };
 
 export type TodoState = TodoItem[];
 
-export type TodosActions<T> = {
-  type: 'add' | 'remove' | 'toggle';
-  payload: T;
+type AddAction = {
+  type: 'add';
+  payload: TodoItem;
 };
+
+type RemoveAction = {
+  type: 'remove';
+  payload: { id: TodoItem['id'] };
+};
+type ToggleAction = {
+  type: 'toggle';
+  payload: { id: TodoItem['id']; isDone: boolean };
+};
+
+export type TodosActions = AddAction | RemoveAction | ToggleAction;

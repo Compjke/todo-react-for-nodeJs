@@ -9,6 +9,7 @@ export const useLocalStorage = <T>(key: string, initValue: T) => {
       else return initValue;
     } catch (err) {
       console.error(err);
+      return initValue;
     }
   });
   useEffect(() => {

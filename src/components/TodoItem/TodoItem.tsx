@@ -1,9 +1,10 @@
-import React, { type Dispatch } from 'react';
+import React, { type Dispatch, type ReactNode } from 'react';
 import type { TodoItem, TodosActions } from '../../types';
 import s from './todo-item.module.css';
 
 type Props = TodoItem & {
-  dispatch: Dispatch<TodosActions<TodoItem>>;
+  dispatch: Dispatch<TodosActions>;
+  children?: ReactNode;
 };
 
 const TodoItemComponent = ({
@@ -22,7 +23,6 @@ const TodoItemComponent = ({
             payload: {
               id,
               isDone: e.target.checked,
-              title,
             },
           })
         }
@@ -31,9 +31,9 @@ const TodoItemComponent = ({
       />
       <p className={s.title}>{title}</p>
       <button
-      className={s.removeBtn}
+        className={s.removeBtn}
         onClick={() => {
-          dispatch({ type: 'remove', payload: { id, isDone, title } });
+          dispatch({ type: 'remove', payload: { id } });
         }}
       >
         ❌
