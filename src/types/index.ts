@@ -1,10 +1,13 @@
 export type TodoItem = {
-  id: number;
+  id: number | string;
   title: string;
   isDone: boolean;
+  description?: string;
 };
 
 export type TodoState = TodoItem[];
+
+export type TodoFilter = 'all' | 'active' | 'completed';
 
 type AddAction = {
   type: 'add';

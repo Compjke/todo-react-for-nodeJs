@@ -17,6 +17,7 @@ const TodoItemComponent = ({
   return (
     <li className={s.item}>
       <input
+        className={s.checkbox}
         onChange={(e) =>
           dispatch({
             type: 'toggle',

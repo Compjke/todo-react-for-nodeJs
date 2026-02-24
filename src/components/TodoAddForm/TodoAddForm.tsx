@@ -1,53 +1,57 @@
-import {
-  useContext,
-  useState,
-  type ChangeEventHandler,
-  type SubmitEventHandler,
-} from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useContext } from 'react';
+import { useForm } from 'react-hook-form';
 import { TodoContext } from '../../context/TodoContext';
+import {
+  todoAddFormSchema,
+  type AddFormData,
+} from '../../schemas/todoAddFormSchema';
 import s from './todo-add-form.module.css';
 export const TodoAddForm = () => {
   const { dispatch } = useContext(TodoContext);
-  const [error, setError] = useState<string | null>(null);
-  const [todoTitle, setTodoTitle] = useState('');
 
-  const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setError(null);
-    setTodoTitle(e.target.value);
-  };
+  const {
+    // reset,
+    handleSubmit,
+    setFocus,
+    setValue,
+    formState: { errors, isSubmitting },
+    register,
+  } = useForm({
+    resolver: zodResolver(todoAddFormSchema),
+    defaultValues: {
+      title: '',
+    },
+  });
 
-  const handleAddTodo: SubmitEventHandler<HTMLFormElement> = (e) => {
-    setError(null);
-    e.preventDefault();
-    if (!todoTitle) {
-      setError('Please enter title of the todo');
-      return;
-    }
+  const handleAddTodo = async (data: AddFormData) => {
     dispatch({
       type: 'add',
       payload: {
-        id: Date.now(),
-        title: todoTitle,
+        id: crypto.randomUUID(),
+        title: data.title,
         isDone: false,
       },
     });
-    setTodoTitle('');
+    // reset()
+    setValue('title', '', { shouldDirty: false, shouldValidate: false });
+    setFocus('title');
   };
   return (
     <>
-      <form className={s.form} onSubmit={handleAddTodo}>
+      <form className={s.form} onSubmit={handleSubmit(handleAddTodo)}>
         <input
-          className={s.input}
-          id='title-todo'
-          type='text'
-          value={todoTitle}
-          onChange={handleChange}
+          {...register('title')}
+          readOnly={isSubmitting}
+          className={`${s.input} ${errors.title ? s.errorInput : ''}`}
           placeholder='Enter todo title'
         />
 
-        <button type='submit'>Add</button>
+        <button disabled={isSubmitting} type='submit'>
+          {isSubmitting ? 'Process...' : 'Add'}
+        </button>
       </form>
-      {error && <span className={s.error}>{error}</span>}
+      {errors.title && <span className={s.error}>{errors.title.message}</span>}
     </>
   );
 };

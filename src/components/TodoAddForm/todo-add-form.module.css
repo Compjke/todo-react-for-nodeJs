@@ -3,12 +3,14 @@
   align-items: center;
   gap: 20px;
   width: 100%;
-  .input {
-    padding: 10px;
-    flex: 1 1 auto;
-  }
 }
-
+.input {
+  padding: 10px;
+  flex: 1 1 auto;
+}
+.errorInput{
+  border: 1px solid red;
+}
 .error {
   font-size: 12px;
   color: rgb(235, 129, 129);

@@ -12,3 +12,32 @@
   padding: 20px;
   border: 1px solid #ccc;
 }
+
+.filters {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+  button {
+    padding: 5px 10px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+
+    &.active {
+      background-color: #040502;
+      scale: 1.1;
+    }
+  }
+
+
+}
+
+.count{
+  text-align: center;
+  color: #888;
+  font-size: 20px;
+}
