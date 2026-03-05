@@ -1,14 +1,16 @@
 .form {
   display: flex;
-  align-items: center;
+  margin-bottom: 10px;
+  flex-direction: column;
   gap: 20px;
   width: 100%;
+  min-width: 300px;
 }
 .input {
   padding: 10px;
   flex: 1 1 auto;
 }
-.errorInput{
+.errorInput {
   border: 1px solid red;
 }
 .error {

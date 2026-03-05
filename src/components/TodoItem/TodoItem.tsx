@@ -1,45 +1,36 @@
-import React, { type Dispatch, type ReactNode } from 'react';
-import type { TodoItem, TodosActions } from '../../types';
+import React from 'react';
+import type { TodoItem } from '../../types';
+import { useTodo } from '../Providers/TodoProvider/TodoProvider';
 import s from './todo-item.module.css';
-
-type Props = TodoItem & {
-  dispatch: Dispatch<TodosActions>;
-  children?: ReactNode;
-};
 
 const TodoItemComponent = ({
   isDone = false,
   title,
-  id,
-  children,
-  dispatch,
-}: Props) => {
+  _id,
+  description,
+}: TodoItem) => {
+  const { deleteTodo, updateTodo } = useTodo();
+
   return (
     <li className={s.item}>
       <input
         className={s.checkbox}
-        onChange={(e) =>
-          dispatch({
-            type: 'toggle',
-            payload: {
-              id,
-              isDone: e.target.checked,
-            },
-          })
-        }
+        onChange={(e) => updateTodo(_id, { isDone: e.target.checked })}
         type='checkbox'
         checked={isDone}
       />
-      <p className={s.title}>{title}</p>
-      <button
-        className={s.removeBtn}
-        onClick={() => {
-          dispatch({ type: 'remove', payload: { id } });
-        }}
-      >
+
+      <div className={s.todo_details}>
+        <p className={s._id}>Id: {_id}</p>
+        <p className={s.title}>Title : {title}</p>
+        {description && (
+          <p className={s.description}>Description : {description}</p>
+        )}
+      </div>
+
+      <button className={s.removeBtn} onClick={() => deleteTodo(_id)}>
         ❌
       </button>
-      {children}
     </li>
   );
 };

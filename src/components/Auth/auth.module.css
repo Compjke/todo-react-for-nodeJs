@@ -1,0 +1,18 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.field {
+  padding: 10px;
+  border: 1px solid transparent;
+  outline: none;
+  transition: all 0.5s ease;
+  &:focus {
+    border: 1px solid darkslateblue;
+  }
+}
+.error {
+  color: rgba(203, 24, 24, 0.825);
+  font-size: 0.8em;
+}

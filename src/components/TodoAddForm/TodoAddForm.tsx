@@ -1,57 +1,55 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useContext } from 'react';
 import { useForm } from 'react-hook-form';
-import { TodoContext } from '../../context/TodoContext';
+import { useTranslation } from 'react-i18next';
 import {
   todoAddFormSchema,
   type AddFormData,
 } from '../../schemas/todoAddFormSchema';
+import { useTodo } from '../Providers/TodoProvider/TodoProvider';
 import s from './todo-add-form.module.css';
 export const TodoAddForm = () => {
-  const { dispatch } = useContext(TodoContext);
-
   const {
-    // reset,
-    handleSubmit,
-    setFocus,
-    setValue,
-    formState: { errors, isSubmitting },
     register,
-  } = useForm({
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<AddFormData>({
     resolver: zodResolver(todoAddFormSchema),
-    defaultValues: {
-      title: '',
-    },
+    defaultValues: { title: '', description: '' },
   });
-
-  const handleAddTodo = async (data: AddFormData) => {
-    dispatch({
-      type: 'add',
-      payload: {
-        id: crypto.randomUUID(),
-        title: data.title,
-        isDone: false,
-      },
-    });
-    // reset()
-    setValue('title', '', { shouldDirty: false, shouldValidate: false });
-    setFocus('title');
+  const { addTodo, isLoading, error } = useTodo();
+  const { t } = useTranslation();
+  const onSubmit = async ({ title, description }: AddFormData) => {
+    try {
+      await addTodo(title, description);
+      reset();
+    } catch (err) {
+      console.log('err while try to Add todo ', err);
+    }
   };
-  return (
-    <>
-      <form className={s.form} onSubmit={handleSubmit(handleAddTodo)}>
-        <input
-          {...register('title')}
-          readOnly={isSubmitting}
-          className={`${s.input} ${errors.title ? s.errorInput : ''}`}
-          placeholder='Enter todo title'
-        />
 
-        <button disabled={isSubmitting} type='submit'>
-          {isSubmitting ? 'Process...' : 'Add'}
-        </button>
-      </form>
+  return (
+    <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
+      <input
+        disabled={isLoading}
+        className={s.input}
+        {...register('title')}
+        placeholder={t('todoTitle')}
+      />
       {errors.title && <span className={s.error}>{errors.title.message}</span>}
-    </>
+      <input
+        disabled={isLoading}
+        className={s.input}
+        {...register('description')}
+        placeholder={t('description')}
+      />
+      {errors.description && (
+        <span className={s.error}>{errors.description.message}</span>
+      )}
+      <button disabled={isLoading} type='submit'>
+        {t('add')}
+      </button>
+      {error && <span className={s.error}>{error}</span>}
+    </form>
   );
 };

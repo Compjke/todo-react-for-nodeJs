@@ -1,52 +1,28 @@
-import { useContext, useMemo } from 'react';
 import { useParams } from 'react-router';
-import { TodoContext } from '../../context/TodoContext';
-import type { TodoFilter } from '../../types';
+import { useTodo } from '../Providers/TodoProvider/TodoProvider';
 import { TodosItem } from '../TodoItem/TodoItem';
 import s from './todo-list.module.css';
-
 export const TodoList = () => {
-  const { todos, dispatch } = useContext(TodoContext);
-  const { filter = 'all' } = useParams<{ filter: TodoFilter }>();
+  const { todos, isLoading, error } = useTodo();
+  const { filter = 'all' } = useParams<{
+    filter: 'all' | 'active' | 'completed';
+  }>();
 
-  const activeCount = useMemo(
-    () => todos.filter((t) => !t.isDone).length,
-    [todos],
-  );
+  if (isLoading) return <p>Loading todos...</p>;
+  if (error) return <p>Error: {error}</p>;
 
-  const filteredTodos = useMemo(() => {
-    console.log('Filtering todos...');
-    switch (filter) {
-      case 'active':
-        return todos.filter((todo) => !todo.isDone);
-      case 'completed':
-        return todos.filter((todo) => todo.isDone);
-      default:
-        return todos;
-    }
-  }, [filter, todos]);
-  const visibleTodos = useMemo(() => {
-    return [...filteredTodos].sort((a, b) => a.title.localeCompare(b.title));
-  }, [filteredTodos]);
+  const filteredTodos = todos.filter((t) => {
+    if (filter === 'active') return !t.isDone;
+    if (filter === 'completed') return t.isDone;
+    return true;
+  });
 
   return (
-    <div>
-      <ul className={s.list}>
-        {visibleTodos.length === 0 ? (
-          <p className={s.empty}>No todos</p>
-        ) : (
-          visibleTodos.map((item) => (
-            <TodosItem
-              id={item.id}
-              key={item.id}
-              isDone={item.isDone}
-              title={item.title}
-              dispatch={dispatch}
-            />
-          ))
-        )}
-      </ul>
-      <p className={s.count}>{activeCount} active tasks left</p>
-    </div>
+    <ul className={s.list}>
+      {filteredTodos.map((todo) => (
+        <TodosItem key={todo._id} {...todo} />
+      ))}
+      {filteredTodos.length === 0 && <p className={s.empty}>No todos found</p>}
+    </ul>
   );
 };

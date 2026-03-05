@@ -6,10 +6,17 @@
   gap: 20px;
 }
 
+.todo_details {
+  display: flex;
+  flex-direction: column;
+  align-items: self-start;
+  gap: 10px;
+}
+
 .title {
   font-size: 20px;
   font-weight: 600;
-  letter-spacing: 10px;
+  letter-spacing: 2px;
   margin: 0;
 }
 .checkbox {

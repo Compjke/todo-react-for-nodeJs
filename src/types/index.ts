@@ -1,8 +1,17 @@
+//User
+
+export type User = {
+  id: string;
+  userName: string;
+} | null;
+
 export type TodoItem = {
-  id: number | string;
+  _id: string;
   title: string;
+  description: string;
   isDone: boolean;
-  description?: string;
+  createdAt: Date;
+  userId: string;
 };
 
 export type TodoState = TodoItem[];
@@ -16,11 +25,11 @@ type AddAction = {
 
 type RemoveAction = {
   type: 'remove';
-  payload: { id: TodoItem['id'] };
+  payload: { id: TodoItem['_id'] };
 };
 type ToggleAction = {
   type: 'toggle';
-  payload: { id: TodoItem['id']; isDone: boolean };
+  payload: { id: TodoItem['_id']; isDone: boolean };
 };
 
 export type TodosActions = AddAction | RemoveAction | ToggleAction;

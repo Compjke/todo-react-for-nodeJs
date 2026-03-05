@@ -1,19 +1,29 @@
-import { Outlet } from 'react-router';
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Outlet, useNavigate } from 'react-router';
 import './App.css';
 import { Header } from './components/Header/Header';
-import { TodoAddForm } from './components/TodoAddForm/TodoAddForm';
-import { TodoProvider } from './components/TodoProvider/TodoProvider';
+import { TodoProvider } from './components/Providers/TodoProvider/TodoProvider';
+import i18n from './i18n';
 export default function App() {
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+  useEffect(() => {
+    const currentLng = i18n.language;
+    if (window.location.pathname === '/') {
+      navigate(`/${currentLng}`);
+    }
+  }, []);
+
   return (
     <TodoProvider>
       <Header />
-      <div className='todo'>
-        <h1>SIMPLE TODO APP</h1>
+      <main className='todo'>
+        <h1>{t('title')}</h1>
         <div className='container'>
-          <TodoAddForm />
           <Outlet />
         </div>
-      </div>
+      </main>
     </TodoProvider>
   );
 }

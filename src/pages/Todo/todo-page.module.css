@@ -1,0 +1,21 @@
+.page {
+}
+
+.link {
+  color: salmon;
+  font-size: 12px;
+  &.activeLink {
+    text-decoration: underline;
+    color: bisque;
+  }
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+  padding: 10px;
+}

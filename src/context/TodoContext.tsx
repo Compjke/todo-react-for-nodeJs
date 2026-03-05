@@ -1,10 +1,21 @@
-import { createContext, type Dispatch } from 'react';
-import type { TodosActions, TodoState } from '../types';
+import { createContext } from "react";
 
-export const TodoContext = createContext<{
-  todos: TodoState;
-  dispatch: Dispatch<TodosActions>;
-}>({
-  todos: [],
-  dispatch: () => {},
-});
+interface Todo {
+  _id: string;
+  title: string;
+  description: string;
+  isDone: boolean;
+  createdAt: Date;
+  userId: string;
+}
+
+interface TodoContextType {
+  todos: Todo[];
+  addTodo: (title: string, description?: string) => Promise<void>;
+  updateTodo: (id: string, updates: Partial<Todo>) => Promise<void>;
+  deleteTodo: (id: string) => Promise<void>;
+  isLoading: boolean;
+  error: string | null;
+}
+
+export const TodoContext = createContext<TodoContextType | undefined>(undefined);
