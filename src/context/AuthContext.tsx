@@ -1,5 +1,5 @@
-import { createContext, type Dispatch } from 'react';
-import type { TodosActions, TodoState, User } from '../types';
+import { createContext } from 'react';
+import type { User } from '../types';
 
 export interface IAuthContextType {
   user: User;
@@ -10,4 +10,4 @@ export interface IAuthContextType {
   loginUser: (userName: string, password: string) => Promise<void>;
   isLoading: boolean;
 }
-export const AuthContext = createContext<IAuthContextType | null>(null)
+export const AuthContext = createContext<IAuthContextType | null>(null);
