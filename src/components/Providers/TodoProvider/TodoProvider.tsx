@@ -33,6 +33,7 @@ export const TodoProvider = ({ children }: { children: ReactNode }) => {
 
   const addTodo = async (title: string, description?: string) => {
     setError(null);
+    setIsLoading(true);
     try {
       const { data } = await todoApi.addTodo(title, description);
       setTodos((prev) => [...prev, data.todo]);
@@ -40,6 +41,8 @@ export const TodoProvider = ({ children }: { children: ReactNode }) => {
     } catch (err: any) {
       setError(t('error', { message: err.message }));
       throw err;
+    } finally {
+      setIsLoading(false);
     }
   };
 
