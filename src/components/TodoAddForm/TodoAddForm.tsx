@@ -47,7 +47,7 @@ export const TodoAddForm = () => {
         <span className={s.error}>{errors.description.message}</span>
       )}
       <button disabled={isLoading} type='submit'>
-        {t('add')}
+        {isLoading ? '...Adding' : t('add')}
       </button>
       {error && <span className={s.error}>{error}</span>}
     </form>

@@ -9,12 +9,13 @@ const TodoItemComponent = ({
   _id,
   description,
 }: TodoItem) => {
-  const { deleteTodo, updateTodo } = useTodo();
+  const { deleteTodo, updateTodo, isLoading } = useTodo();
 
   return (
     <li className={s.item}>
       <input
         className={s.checkbox}
+        disabled={isLoading}
         onChange={(e) => updateTodo(_id, { isDone: e.target.checked })}
         type='checkbox'
         checked={isDone}
@@ -28,7 +29,11 @@ const TodoItemComponent = ({
         )}
       </div>
 
-      <button className={s.removeBtn} onClick={() => deleteTodo(_id)}>
+      <button
+        className={s.removeBtn}
+        disabled={isLoading}
+        onClick={() => deleteTodo(_id)}
+      >
         ❌
       </button>
     </li>

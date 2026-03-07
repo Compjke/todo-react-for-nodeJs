@@ -47,23 +47,29 @@ export const TodoProvider = ({ children }: { children: ReactNode }) => {
 
   const updateTodo = async (id: string, updates: Partial<TodoItem>) => {
     setError(null);
+    setIsLoading(true);
     try {
       const { data } = await todoApi.updateTodo(id, updates);
       setTodos((prev) => prev.map((t) => (t._id === id ? data.todo : t)));
     } catch (err: any) {
       setError(t('error', { message: err.message }));
       throw err;
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const deleteTodo = async (id: string) => {
     setError(null);
+    setIsLoading(true);
     try {
       await todoApi.deleteTodo(id);
       setTodos((prev) => prev.filter((t) => t._id !== id));
     } catch (err: any) {
       setError(t('error', { message: err.message }));
       throw err;
+    } finally {
+      setIsLoading(false);
     }
   };
 

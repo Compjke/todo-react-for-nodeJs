@@ -20,7 +20,7 @@ export const LoginForm = () => {
   });
   const [serverError, setServerError] = useState('');
   const { t } = useTranslation();
-  const { loginUser } = useAuth();
+  const { loginUser, isLoading } = useAuth();
   const navigate = useNavigate();
 
   const onSubmit = async (data: LoginFormData) => {
@@ -40,6 +40,7 @@ export const LoginForm = () => {
   return (
     <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
       <input
+        disabled={isLoading}
         className={s.field}
         type='text'
         {...register('userName')}
@@ -49,6 +50,7 @@ export const LoginForm = () => {
         <span className={s.error}>{errors.userName.message}</span>
       )}
       <input
+        disabled={isLoading}
         className={s.field}
         type='password'
         {...register('password')}
@@ -59,7 +61,7 @@ export const LoginForm = () => {
       )}
 
       {serverError && <p className={s.error}>{serverError}</p>}
-      <button type='submit'>{t('login')}</button>
+      <button type='submit' disabled={isLoading}>{isLoading ? 'Process...' : t('login')}</button>
     </form>
   );
 };
