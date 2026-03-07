@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { todoApi } from '../../../api/todoApi';
 import { TodoContext } from '../../../context';
 import type { TodoItem } from '../../../types';
-import { wait } from '../../../utils';
 import { useAuth } from '../AuthProvider/AuthProvider';
 
 export const TodoProvider = ({ children }: { children: ReactNode }) => {
@@ -23,8 +22,6 @@ export const TodoProvider = ({ children }: { children: ReactNode }) => {
     setError(null);
 
     try {
-      console.log('Fetch todos...');
-      await wait(2000);
       const { data } = await todoApi.getTodos();
       setTodos(data);
     } catch (err: any) {
@@ -39,6 +36,7 @@ export const TodoProvider = ({ children }: { children: ReactNode }) => {
     try {
       const { data } = await todoApi.addTodo(title, description);
       setTodos((prev) => [...prev, data.todo]);
+      return data;
     } catch (err: any) {
       setError(t('error', { message: err.message }));
       throw err;

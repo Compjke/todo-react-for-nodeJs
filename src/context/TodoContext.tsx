@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext } from 'react';
 
 interface Todo {
   _id: string;
@@ -11,11 +11,16 @@ interface Todo {
 
 interface TodoContextType {
   todos: Todo[];
-  addTodo: (title: string, description?: string) => Promise<void>;
+  addTodo: (
+    title: string,
+    description?: string,
+  ) => Promise<{ todo: Todo }>;
   updateTodo: (id: string, updates: Partial<Todo>) => Promise<void>;
   deleteTodo: (id: string) => Promise<void>;
   isLoading: boolean;
   error: string | null;
 }
 
-export const TodoContext = createContext<TodoContextType | undefined>(undefined);
+export const TodoContext = createContext<TodoContextType | undefined>(
+  undefined,
+);
